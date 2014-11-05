@@ -6,7 +6,11 @@
   %script{ :src => '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js' }
   = css :main
   = js :main
+  %script
+    App.events = new App.eventCollection;
+    App.events.reset(
+    =@json_data
+    );
+    App.start;
 
 %body
-  %h1 Hello world!
-  = @data
