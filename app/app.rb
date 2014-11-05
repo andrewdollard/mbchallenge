@@ -12,7 +12,7 @@ assets do
 end
 
 get '/' do
-  @data = CSV.foreach('sample_data.csv').reject{|r| r[0] == 'Date'}.map do |row|
+  @data = CSV.foreach('../sample_data.csv').reject{|r| r[0] == 'Date'}.map do |row|
       {
         timestamp: Time.strptime("#{row[0]} #{row[1]}", "%m/%d/%Y %I:%M %p"),
         gender: row[2],
