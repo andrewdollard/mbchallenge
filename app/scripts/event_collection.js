@@ -1,3 +1,5 @@
-App.eventCollection = Backbone.Collection.extend({
-  model: App.event
+var App = App || {};
+
+App.EventCollection = Backbone.Collection.extend({
+  model: App.Event
 });

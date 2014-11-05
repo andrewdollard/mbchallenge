@@ -1,3 +1,5 @@
-App.event = Backbone.Model.extend({
+var App = App || {};
+
+App.Event = Backbone.Model.extend({
 
 });
