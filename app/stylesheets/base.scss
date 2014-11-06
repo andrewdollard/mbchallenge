@@ -1,1 +1,19 @@
-h1 { color: red; }
+.activityLine {
+  path, line {
+    fill: none;
+    stroke: dodgerblue;
+    stroke-width: 2;
+  }
+}
+.activityAxis {
+  path, line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+  }
+
+  text {
+    font-family: sans-serif;
+    font-size: 11px;
+  }
+}
