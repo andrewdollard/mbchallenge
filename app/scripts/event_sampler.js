@@ -1,11 +1,11 @@
 var App = App || {};
 
-App.DataSampler = function(eventCollection, options) {
+App.EventSampler = function(eventCollection, options) {
   this._events = eventCollection;
   this._options = options;
 };
 
-App.DataSampler.prototype.samples = function(){
+App.EventSampler.prototype.samples = function(){
   var earliestTimeStamp = this._events.first().get('timestamp'),
       result = [];
   for (var i = 0; i < this._events.length; i++) {

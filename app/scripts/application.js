@@ -11,7 +11,7 @@ App.constants = {
 
 App.start = function(){
   var subset = App.events.filterByDateRange(new Date('2014-7-28'), App.now),
-      sampler = new App.DataSampler(subset, {periodLength: (App.constants.HOUR)}),
+      sampler = new App.EventSampler(subset, {periodLength: (App.constants.HOUR)}),
       activityView = new App.ActivityView({sampler: sampler});
 
   activityView.render();
