@@ -19,7 +19,7 @@ App.ActivityView = Backbone.View.extend({
         yScale = d3.scale.linear().domain([100, 0]).range([padding, height - padding]),
         xScale = d3.time.scale().domain([this._sampler.startTime(), this._sampler.endTime()]).range([padding , width - padding]);
 
-    var field = d3.select("body")
+    var field = d3.select(this.el)
         .append("svg:svg")
         .attr("width", width)
         .attr("height", height);
