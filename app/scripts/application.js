@@ -10,8 +10,13 @@ App.constants = {
 };
 
 App.start = function(){
-  var subset = App.events.filterByDateRange(new Date('2014-7-29'), App.now),
+  var subset = App.events.filterByDateRange(new Date('2014-7-28'), App.now),
       sampler = new App.DataSampler(subset, {periodLength: (App.constants.HOUR)}),
-      samples = sampler.samples();
+      activityView = new App.ActivityView({sampler: sampler});
+
+  activityView.render();
+  _.each(sampler.samples(), function(s){
+    console.log(s.percentActive());
+  });
 };
 
