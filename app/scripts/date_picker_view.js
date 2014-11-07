@@ -6,6 +6,10 @@ App.DatePickerView = Backbone.View.extend({
    this._days = options.days;
   },
 
+  events: {
+    'click .date-picker-button' : 'buttonClick'
+  },
+
   render: function(){
     this.$el.empty();
     for (var i=0, len=this._days.length; i<len; i++){
@@ -13,10 +17,14 @@ App.DatePickerView = Backbone.View.extend({
           $button = $('<button>').text(text)
                                  .attr('distance', this._days[i])
                                  .addClass('date-picker-button btn btn-default');
-      $button.on('click', function(e){
-        console.log($(this).attr('distance'));
-      });
       this.$el.prepend($button);
     }
+    this.delegateEvents();
+  },
+
+  buttonClick: function(e) {
+    var d = parseInt($(e.target).attr('distance'), 10);
+    App.controller.trigger('dateChange', d);
   }
+
 });
