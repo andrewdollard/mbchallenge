@@ -39,22 +39,22 @@ App.ActivityView = Backbone.View.extend({
 
   _configureDimensions: function() {
     this._width = this.$el.width();
-    this._height = this._width / 2;
-    this._axisPadding = 40;
-    this._clearPadding = 10;
+    this._height = this._width / 3;
+    this._padding = [10, 10, 40, 50];
+
     this._xScale = d3.time.scale()
                           .domain([this._firstTimestamp, this._lastTimestamp])
-                          .range([this._axisPadding, this._width - this._axisPadding]);
+                          .range([this._padding[3], this._width - this._padding[1]]);
     this._yScale = d3.scale.linear()
-                           .domain([100, 0])
-                           .range([this._clearPadding, this._height - this._axisPadding]);
+                           .domain([1, 0])
+                           .range([this._padding[0], this._height - this._padding[2]]);
   },
 
   _draw: function() {
     var self = this;
     var line = d3.svg.line()
                      .x(function(d) { return self._xScale(d[0]) })
-                     .y(function(d) { return self._yScale(d[1]) })
+                     .y(function(d) { return self._yScale(d[1] / 100) })
                      .defined(function(d) { return d != null; });
 
     var ticks = (this._width < 680) ? 5 : 10;
@@ -67,7 +67,8 @@ App.ActivityView = Backbone.View.extend({
     var yAxis = d3.svg.axis()
                       .scale(this._yScale)
                       .orient("left")
-                      .ticks(ticks);
+                      .ticks(ticks)
+                      .tickFormat(d3.format("%"));
 
     var trendLine = ss.linear_regression().data(this._data.map(function(d){
       return [+d[0], d[1]]
@@ -92,12 +93,12 @@ App.ActivityView = Backbone.View.extend({
 
     field.append("svg:g")
         .attr("class", "activity-axis")
-        .attr("transform", "translate(0," + (this._height - this._axisPadding + 10) + ")")
+        .attr("transform", "translate(0," + (this._height - this._padding[2] + 10) + ")")
         .call(xAxis);
 
     field.append("svg:g")
         .attr("class", "activity-axis")
-        .attr("transform", "translate(" + (this._axisPadding - 10) + ",0)")
+        .attr("transform", "translate(" + (this._padding[3] - 10) + ",0)")
         .call(yAxis);
 
     field.append("svg:g").attr('class', ('trend-line' + (this._trend ? ' active':'')))

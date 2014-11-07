@@ -1,9 +1,11 @@
 #date-picker-view {
-  text-align: right;
-  select {
-    display: none;
-    margin-bottom: 14px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: inherit;
+  padding-top: 15px;
+  padding-left: 20px;
+  select { display: none; }
   .btn {
     &.selected { background-color: paleturquoise; }
   }
@@ -11,8 +13,8 @@
 
 @media (max-width: 500px) {
   .date-picker-buttons { display: none; }
-  .date-picker-col { width: 100%; }
   #date-picker-view {
     select { display: block; }
   }
 }
+
