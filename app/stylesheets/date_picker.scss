@@ -4,32 +4,8 @@
     display: none;
     margin-bottom: 14px;
   }
-}
-
-.date-picker-button {
-  width: 125px;
-  padding: 12px;
-  margin: 20px 10px 20px 0;
-  display: inline-block;
-  text-shadow: none;
-  &.selected {
-    background-color: paleturquoise;
-  }
-}
-
-@media (max-width: 768px) {
-  .date-picker-button {
-    width: 100px;
-    padding: 10px;
-    margin-right: 5px;
-    font-size: .9em;
-  }
-}
-
-@media (max-width: 630px) {
-  .date-picker-button {
-    width: 70px;
-    font-size: .8em;
+  .btn {
+    &.selected { background-color: paleturquoise; }
   }
 }
 
