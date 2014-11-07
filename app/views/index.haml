@@ -12,5 +12,13 @@
   = erb :app_start
 
 %body
-  #date-picker-view
-  #activity-view
+  #activity-container
+    .container-fluid
+      .row
+        .col-sm-2
+          %h2 Activity
+        .col-sm-10
+          #date-picker-view
+      .row
+        .col-sm-12
+          #activity-view

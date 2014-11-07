@@ -28,3 +28,15 @@
   margin: 0 10px 0 0;
   float: right;
 }
+
+#activity-container {
+  width: 960px;
+  max-width: 100%;
+}
+
+#date-picker-view {
+  button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
