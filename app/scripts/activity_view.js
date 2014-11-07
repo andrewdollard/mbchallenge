@@ -36,7 +36,7 @@ App.ActivityView = Backbone.View.extend({
         .attr("width", this._width)
         .attr("height", this._height);
 
-    var activityLine = field.append("svg:g").attr('class', 'activityLine'),
+    var activityLine = field.append("svg:g").attr('class', 'activity-line'),
         line = d3.svg.line()
                      .x(function(d,i) { return self._xScale(self._timestamps[i]) })
                      .y(function(d) { return self._yScale(d); });
@@ -48,7 +48,7 @@ App.ActivityView = Backbone.View.extend({
                       .orient('bottom');
 
    field.append("svg:g")
-      .attr("class", "activityAxis")
+      .attr("class", "activity-axis")
       .attr("transform", "translate(0," + (this._height - this._padding + 10) + ")")
       .call(xAxis);
 
@@ -57,7 +57,7 @@ App.ActivityView = Backbone.View.extend({
                       .orient("left");
 
     field.append("svg:g")
-        .attr("class", "activityAxis")
+        .attr("class", "activity-axis")
         .attr("transform", "translate(" + (this._padding - 10) + ",0)")
         .call(yAxis);
   }
