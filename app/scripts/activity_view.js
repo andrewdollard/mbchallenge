@@ -50,20 +50,23 @@ App.ActivityView = Backbone.View.extend({
 
     activityLine.append("svg:path").attr("d", line(this._data));
 
+
+    var ticks = (this._width < 680) ? 5 : 10;
+
     var xAxis = d3.svg.axis()
                       .scale(this._xScale)
-                      .orient('bottom');
+                      .orient('bottom')
+                      .ticks(ticks);
 
    field.append("svg:g")
       .attr("class", "activity-axis")
       .attr("transform", "translate(0," + (this._height - this._axisPadding + 10) + ")")
       .call(xAxis);
 
-    var yTicks = (this._width < 680) ? 5 : 10;
     var yAxis = d3.svg.axis()
                       .scale(this._yScale)
                       .orient("left")
-                      .ticks(yTicks);
+                      .ticks(ticks);
 
     field.append("svg:g")
         .attr("class", "activity-axis")
