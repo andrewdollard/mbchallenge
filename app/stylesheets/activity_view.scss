@@ -1,0 +1,25 @@
+.activity-line {
+  path, line {
+    fill: none;
+    stroke: dodgerblue;
+    stroke-width: 2;
+  }
+}
+.activity-axis {
+  path, line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+  }
+
+  text {
+    font-family: sans-serif;
+    font-size: 11px;
+  }
+}
+
+#activity-container {
+  width: 960px;
+  max-width: 100%;
+  margin: 0 auto;
+}

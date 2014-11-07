@@ -24,13 +24,14 @@ App.ActivityView = Backbone.View.extend({
   _configureDimensions: function() {
     this._width = this.$el.width();
     this._height = this._width / 2;
-    this._padding = 40;
+    this._axisPadding = 40;
+    this._clearPadding = 10;
     this._xScale = d3.time.scale()
                           .domain([this._sampler.startTime(), this._sampler.endTime()])
-                          .range([this._padding, this._width - this._padding]);
+                          .range([this._axisPadding, this._width - this._clearPadding]);
     this._yScale = d3.scale.linear()
                            .domain([100, 0])
-                           .range([this._padding, this._height - this._padding]);
+                           .range([this._clearPadding, this._height - this._axisPadding]);
   },
 
   _draw: function() {
@@ -55,16 +56,18 @@ App.ActivityView = Backbone.View.extend({
 
    field.append("svg:g")
       .attr("class", "activity-axis")
-      .attr("transform", "translate(0," + (this._height - this._padding + 10) + ")")
+      .attr("transform", "translate(0," + (this._height - this._axisPadding + 10) + ")")
       .call(xAxis);
 
+    var yTicks = (this._width < 680) ? 5 : 10;
     var yAxis = d3.svg.axis()
                       .scale(this._yScale)
-                      .orient("left");
+                      .orient("left")
+                      .ticks(yTicks);
 
     field.append("svg:g")
         .attr("class", "activity-axis")
-        .attr("transform", "translate(" + (this._padding - 10) + ",0)")
+        .attr("transform", "translate(" + (this._axisPadding - 10) + ",0)")
         .call(yAxis);
   }
 
