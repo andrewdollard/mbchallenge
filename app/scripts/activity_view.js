@@ -7,7 +7,8 @@ App.ActivityView = Backbone.View.extend({
     this._sampler = options.sampler;
     this._samples = options.sampler.samples();
     this._timestamps = options.sampler.timestamps();
-    this._data = _.map(this._samples, function(sample) {
+    this._data = _.map(this._samples, function(sample, i) {
+      if (sample == undefined) { return null; }
       return sample.percentActive();
     });
     $(window).on('resize', function(){
@@ -39,7 +40,8 @@ App.ActivityView = Backbone.View.extend({
     var activityLine = field.append("svg:g").attr('class', 'activity-line'),
         line = d3.svg.line()
                      .x(function(d,i) { return self._xScale(self._timestamps[i]) })
-                     .y(function(d) { return self._yScale(d); });
+                     .y(function(d) { return self._yScale(d); })
+                     .defined(function(d) { return d != null; });
 
     activityLine.append("svg:path").attr("d", line(this._data));
 
