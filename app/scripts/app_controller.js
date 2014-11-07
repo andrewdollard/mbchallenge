@@ -18,7 +18,7 @@ App.controller._updateActivityView = function() {
   var subset = App.events.filterByDateRange(this._startDate, App.now),
       sampler = new App.EventSampler(subset, {periodLength: this._periodsForDays[this._currentDayIndex]});
 
-  this._activityView = new App.ActivityView({el: $('#activity-view'), sampler: sampler}),
+  this._activityView = new App.ActivityView({el: $('#activity-view'), sampler: sampler});
   this._activityView.render();
 };
 
@@ -33,4 +33,4 @@ App.controller._setStartDate = function(){
       dayOfMonth =  startDate.getDate();
   startDate.setDate(dayOfMonth - this._days[this._currentDayIndex]);
   this._startDate = startDate;
-}
+};
