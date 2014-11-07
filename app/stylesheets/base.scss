@@ -28,6 +28,15 @@
   float: right;
 }
 
+@media (max-width: 768px) {
+  .date-picker-button {
+    width: 80px;
+    margin: 0 5px 0 0;
+//    float: left;
+    font-size: .9em;
+  }
+}
+
 #activity-container {
   width: 960px;
   max-width: 100%;
