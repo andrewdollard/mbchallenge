@@ -81,15 +81,25 @@ App.ActivityView = Backbone.View.extend({
     var trendLine = ss.linear_regression().data(this._data.map(function(d){
       return [+d[0], d[1]]
     })).line();
-
     var trendData = this._xScale.domain().map(function(x) {
       return [x, trendLine(x)];
+    });
+
+    var avg = ss.mean(this._values);
+    var avgData = this._xScale.domain().map(function(x) {
+      return [x, avg];
     });
 
     field.append("svg:g").attr('class', 'trend-line')
         .append("path")
         .datum(trendData)
         .attr("d", line);
+
+    field.append("svg:g").attr('class', 'avg-line')
+        .append("path")
+        .datum(avgData)
+        .attr("d", line);
+
 
   }
 

@@ -1,7 +1,7 @@
 .activity-line {
   path, line {
     fill: none;
-    stroke: dodgerblue;
+    stroke: steelblue;
     stroke-width: 2;
   }
 }
@@ -27,7 +27,16 @@
 .trend-line {
   path, line {
     fill: none;
-    stroke: firebrick;
+    stroke: orangered;
+    stroke-width: 2;
+  }
+}
+
+
+.avg-line {
+  path, line {
+    fill: none;
+    stroke: orange;
     stroke-width: 2;
   }
 }
