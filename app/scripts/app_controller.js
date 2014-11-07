@@ -8,17 +8,18 @@ App.controller.start = function(){
   this._currentDayIndex = 0;
   this._setStartDate();
 
+  this._activityView = new App.ActivityView({el: $('#activity-view')});
   var datePickerView = new App.DatePickerView({el: $('#date-picker-view'), days: this._days});
-  datePickerView.render();
 
   this._updateActivityView();
+  datePickerView.render();
 };
 
 App.controller._updateActivityView = function() {
   var subset = App.events.filterByDateRange(this._startDate, App.now),
       sampler = new App.EventSampler(subset, {periodLength: this._periodsForDays[this._currentDayIndex]});
 
-  this._activityView = new App.ActivityView({el: $('#activity-view'), sampler: sampler});
+  this._activityView.setSampler(sampler);
   this._activityView.render();
 };
 

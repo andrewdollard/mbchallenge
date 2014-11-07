@@ -25,18 +25,41 @@
 }
 
 .trend-line {
+  display: none;
   path, line {
     fill: none;
     stroke: orangered;
     stroke-width: 2;
   }
+  &.active {
+    display: block;
+  }
 }
 
 
-.avg-line {
+.mean-line {
+  display: none;
   path, line {
     fill: none;
     stroke: orange;
     stroke-width: 2;
   }
+  &.active {
+    display: block;
+  }
+}
+
+#activity-view {
+  .buttons {
+    text-align: right;
+  }
+
+  .mean-button.active {
+    background-color: orange;
+  }
+
+  .trend-button.active {
+    background-color: orangered;
+  }
+
 }

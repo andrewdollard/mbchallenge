@@ -3,9 +3,29 @@ var App = App || {};
 App.ActivityView = Backbone.View.extend({
 
   initialize: function(options) {
-    var self = this,
-        samples = options.sampler.samples(),
-        timestamps = options.sampler.timestamps();
+    this._$field = this.$el.find('.field');
+    this._mean = false;
+    this._trend = false;
+
+    var self = this;
+    $(window).on('resize', function(){
+      self.render();
+    });
+  },
+
+  events: {
+    'click .mean-button': '_toggleMean',
+    'click .trend-button': '_toggleTrend'
+  },
+
+  render: function() {
+    this._configureDimensions();
+    this._draw();
+  },
+
+  setSampler: function(sampler) {
+    var  samples = sampler.samples(),
+         timestamps = sampler.timestamps();
 
     this._values = _.map(samples, function(sample) {
       if (sample == undefined) { return null; }
@@ -15,15 +35,6 @@ App.ActivityView = Backbone.View.extend({
     this._data = _.zip(timestamps, this._values);
     this._firstTimestamp = _.first(timestamps);
     this._lastTimestamp = _.last(timestamps);
-
-    $(window).on('resize', function(){
-      self.render();
-    });
-  },
-
-  render: function() {
-    this._configureDimensions();
-    this._draw();
   },
 
   _configureDimensions: function() {
@@ -41,20 +52,10 @@ App.ActivityView = Backbone.View.extend({
 
   _draw: function() {
     var self = this;
-    this.$el.empty();
-    var field = d3.select(this.el)
-        .append("svg:svg")
-        .attr("width", this._width)
-        .attr("height", this._height);
-
-    var activityLine = field.append("svg:g").attr('class', 'activity-line');
     var line = d3.svg.line()
-                     .x(function(d,i) { return self._xScale(d[0]) })
-                     .y(function(d) { return self._yScale(d[1]); })
+                     .x(function(d) { return self._xScale(d[0]) })
+                     .y(function(d) { return self._yScale(d[1]) })
                      .defined(function(d) { return d != null; });
-
-    activityLine.append("svg:path").attr("d", line(this._data));
-
 
     var ticks = (this._width < 680) ? 5 : 10;
 
@@ -63,20 +64,10 @@ App.ActivityView = Backbone.View.extend({
                       .orient('bottom')
                       .ticks(ticks);
 
-   field.append("svg:g")
-      .attr("class", "activity-axis")
-      .attr("transform", "translate(0," + (this._height - this._axisPadding + 10) + ")")
-      .call(xAxis);
-
     var yAxis = d3.svg.axis()
                       .scale(this._yScale)
                       .orient("left")
                       .ticks(ticks);
-
-    field.append("svg:g")
-        .attr("class", "activity-axis")
-        .attr("transform", "translate(" + (this._axisPadding - 10) + ",0)")
-        .call(yAxis);
 
     var trendLine = ss.linear_regression().data(this._data.map(function(d){
       return [+d[0], d[1]]
@@ -85,22 +76,55 @@ App.ActivityView = Backbone.View.extend({
       return [x, trendLine(x)];
     });
 
-    var avg = ss.mean(this._values);
-    var avgData = this._xScale.domain().map(function(x) {
-      return [x, avg];
+    var mean = ss.mean(this._values);
+    var meanData = this._xScale.domain().map(function(x) {
+      return [x, mean];
     });
 
-    field.append("svg:g").attr('class', 'trend-line')
+    this._$field.empty();
+    var field = d3.select(this._$field[0])
+        .append("svg:svg")
+        .attr("width", this._width)
+        .attr("height", this._height);
+
+    var activityLine = field.append("svg:g").attr('class', 'activity-line');
+    activityLine.append("svg:path").attr("d", line(this._data));
+
+    field.append("svg:g")
+        .attr("class", "activity-axis")
+        .attr("transform", "translate(0," + (this._height - this._axisPadding + 10) + ")")
+        .call(xAxis);
+
+    field.append("svg:g")
+        .attr("class", "activity-axis")
+        .attr("transform", "translate(" + (this._axisPadding - 10) + ",0)")
+        .call(yAxis);
+
+    field.append("svg:g").attr('class', ('trend-line' + (this._trend ? ' active':'')))
         .append("path")
         .datum(trendData)
         .attr("d", line);
 
-    field.append("svg:g").attr('class', 'avg-line')
+    field.append("svg:g").attr('class', ('mean-line' + (this._mean ? ' active':'')))
         .append("path")
-        .datum(avgData)
+        .datum(meanData)
         .attr("d", line);
 
 
+  },
+
+  _toggleMean: function(e) {
+    $(e.target).toggleClass('active');
+    this._mean = !this._mean;
+    var klass = (this._mean) ? 'mean-line active' : 'mean-line';
+    this.$el.find('.mean-line').attr('class', klass);
+  },
+
+  _toggleTrend: function(e) {
+    $(e.target).toggleClass('active');
+    this._trend = !this._trend;
+    var klass = (this._trend) ? 'trend-line active' : 'trend-line';
+    this.$el.find('.trend-line').attr('class', klass);
   }
 
 });
