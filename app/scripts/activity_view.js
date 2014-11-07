@@ -25,8 +25,12 @@ App.ActivityView = Backbone.View.extend({
     this._width = this.$el.width();
     this._height = this._width / 2;
     this._padding = 40;
-    this._xScale = d3.time.scale().domain([this._sampler.startTime(), this._sampler.endTime()]).range([this._padding, this._width - this._padding]);
-    this._yScale = d3.scale.linear().domain([100, 0]).range([this._padding, this._height - this._padding]);
+    this._xScale = d3.time.scale()
+                          .domain([this._sampler.startTime(), this._sampler.endTime()])
+                          .range([this._padding, this._width - this._padding]);
+    this._yScale = d3.scale.linear()
+                           .domain([100, 0])
+                           .range([this._padding, this._height - this._padding]);
   },
 
   _draw: function() {
