@@ -3,14 +3,19 @@ var App = App || {};
 App.ActivityView = Backbone.View.extend({
 
   initialize: function(options) {
-    var self = this;
-    this._sampler = options.sampler;
-    this._samples = options.sampler.samples();
-    this._timestamps = options.sampler.timestamps();
-    this._data = _.map(this._samples, function(sample, i) {
+    var self = this,
+        samples = options.sampler.samples(),
+        timestamps = options.sampler.timestamps();
+
+    this._values = _.map(samples, function(sample) {
       if (sample == undefined) { return null; }
       return sample.percentActive();
     });
+
+    this._data = _.zip(timestamps, this._values);
+    this._firstTimestamp = _.first(timestamps);
+    this._lastTimestamp = _.last(timestamps);
+
     $(window).on('resize', function(){
       self.render();
     });
@@ -27,8 +32,8 @@ App.ActivityView = Backbone.View.extend({
     this._axisPadding = 40;
     this._clearPadding = 10;
     this._xScale = d3.time.scale()
-                          .domain([this._sampler.startTime(), this._sampler.endTime()])
-                          .range([this._axisPadding, this._width - this._clearPadding]);
+                          .domain([this._firstTimestamp, this._lastTimestamp])
+                          .range([this._axisPadding, this._width - this._axisPadding]);
     this._yScale = d3.scale.linear()
                            .domain([100, 0])
                            .range([this._clearPadding, this._height - this._axisPadding]);
@@ -42,10 +47,10 @@ App.ActivityView = Backbone.View.extend({
         .attr("width", this._width)
         .attr("height", this._height);
 
-    var activityLine = field.append("svg:g").attr('class', 'activity-line'),
-        line = d3.svg.line()
-                     .x(function(d,i) { return self._xScale(self._timestamps[i]) })
-                     .y(function(d) { return self._yScale(d); })
+    var activityLine = field.append("svg:g").attr('class', 'activity-line');
+    var line = d3.svg.line()
+                     .x(function(d,i) { return self._xScale(d[0]) })
+                     .y(function(d) { return self._yScale(d[1]); })
                      .defined(function(d) { return d != null; });
 
     activityLine.append("svg:path").attr("d", line(this._data));
@@ -72,6 +77,20 @@ App.ActivityView = Backbone.View.extend({
         .attr("class", "activity-axis")
         .attr("transform", "translate(" + (this._axisPadding - 10) + ",0)")
         .call(yAxis);
+
+    var trendLine = ss.linear_regression().data(this._data.map(function(d){
+      return [+d[0], d[1]]
+    })).line();
+
+    var trendData = this._xScale.domain().map(function(x) {
+      return [x, trendLine(x)];
+    });
+
+    field.append("svg:g").attr('class', 'trend-line')
+        .append("path")
+        .datum(trendData)
+        .attr("d", line);
+
   }
 
 });
