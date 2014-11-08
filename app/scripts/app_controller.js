@@ -3,10 +3,11 @@ var App = App || {};
 App.controller = _.clone(Backbone.Events);
 
 App.controller.start = function(){
+  var hour = 1000 * 60 * 60;
+  App.now = new Date('2014-07-31');
   this._days = [1,3,7,14];
-  this._periodsForDays = [App.constants.HOUR, App.constants.HOUR * 3, App.constants.HOUR * 6, App.constants.HOUR * 6];
-  this._currentDayIndex = 0;
-  this._setStartDate();
+  this._periodsForDays = [hour, hour * 3, hour * 6, hour * 6];
+  this._setDayLimit(this._days[0]);
 
   this._activityView = new App.ActivityView({el: $('#activity-view')});
   this._segmentView = new App.SegmentView({el: $('#segment-view')});
@@ -33,13 +34,13 @@ App.controller._updateViews = function() {
   this._activityView.render();
 };
 
-App.controller.on('dateChange', function(day){
-  this._currentDayIndex = _.indexOf(this._days, day);
-  this._setStartDate();
+App.controller.on('dateChange', function(days){
+  this._setDayLimit(days);
   this._updateViews();
 });
 
-App.controller._setStartDate = function(){
+App.controller._setDayLimit = function(days){
+  this._currentDayIndex = _.indexOf(this._days, days);
   var startDate = new Date(App.now),
       dayOfMonth =  startDate.getDate();
   startDate.setDate(dayOfMonth - this._days[this._currentDayIndex]);

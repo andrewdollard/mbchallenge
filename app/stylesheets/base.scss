@@ -6,3 +6,13 @@
 .activity-title-col, .date-picker-col {
   height: 60px;
 }
+
+.centered-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  h2 {
+    text-align: center;
+  }
+}
