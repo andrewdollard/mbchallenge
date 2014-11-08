@@ -19,12 +19,12 @@ App.controller.start = function(){
 
 App.controller._updateActivityView = function() {
   var subset = App.events.filterByDateRange(this._startDate, App.now),
-      sampler = new App.EventSampler(subset, {periodLength: this._periodsForDays[this._currentDayIndex]});
+      activitySampler = new App.TimeSampler(subset, this._periodsForDays[this._currentDayIndex]);
 
   this._deviceView.setCollection(subset);
   this._deviceView.render();
 
-  this._activityView.setSampler(sampler);
+  this._activityView.setSampler(activitySampler);
   this._activityView.render();
 };
 
