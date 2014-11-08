@@ -9,9 +9,9 @@ App.controller.start = function(){
   this._setStartDate();
 
   this._activityView = new App.ActivityView({el: $('#activity-view')});
-  var datePickerView = new App.DatePickerView({el: $('#date-picker-view'), days: this._days});
-
+  this._segmentView = new App.SegmentView({el: $('#segment-view')});
   this._deviceView = new App.DeviceView({el: $('#device-view')});
+  var datePickerView = new App.DatePickerView({el: $('#date-picker-view'), days: this._days});
 
   this._updateViews();
   datePickerView.render();
@@ -20,7 +20,11 @@ App.controller.start = function(){
 App.controller._updateViews = function() {
   var subset = App.events.filterByDateRange(this._startDate, App.now),
       activitySampler = new App.TimeSampler(subset, this._periodsForDays[this._currentDayIndex]),
-      deviceSampler = new App.AttributeSampler(subset, 'device');
+      deviceSampler = new App.AttributeSampler(subset, 'device'),
+      segmentSampler = new App.AttributeSampler(subset, 'gender');
+
+  this._segmentView.setSampler(segmentSampler);
+  this._segmentView.render();
 
   this._deviceView.setSampler(deviceSampler);
   this._deviceView.render();
