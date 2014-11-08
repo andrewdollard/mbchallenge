@@ -27,9 +27,6 @@ App.DatePickerView = Backbone.View.extend({
       if (i == 0) { $button.addClass('selected'); }
       this.$buttons.append($button);
       this.$select.append($option);
-      $option.on('select', function(e){
-        self.buttonClick();
-      });
     }
     this.delegateEvents();
   },
