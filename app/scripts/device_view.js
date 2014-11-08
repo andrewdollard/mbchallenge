@@ -22,7 +22,7 @@ App.DeviceView = Backbone.View.extend({
 
   _configureDimensions: function(){
     this._width = this.$el.width();
-    this._padding = [20, 110, 0, 110];
+    this._padding = [40, 110, 0, 110];
     var diameter = this._width - this._padding[1] - this._padding[3];
     this._outerRadius = diameter / 2;
     this._floatingLabelRadius = this._outerRadius + 60;

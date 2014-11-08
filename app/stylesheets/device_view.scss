@@ -1,0 +1,17 @@
+#device-view {
+  width: 100%;
+  margin: 20px auto;
+}
+
+@media (max-width: 768px) {
+  #device-view { max-width: 80%; }
+}
+
+@media (max-width: 560px) {
+  #device-view { max-width: 100%; }
+}
+
+
+.pie-label-text {
+  font-size: 1.2em;
+}
