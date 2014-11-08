@@ -4,7 +4,8 @@ App.DeviceView = Backbone.View.extend({
 
   setCollection: function(event_collection) {
     var data = event_collection.byDevice();
-    this._data = _(data).map(function(d){ return [d[0], d[1].length] });
+    var eventCount = event_collection.length;
+    this._data = _(data).map(function(d){ return [d[0], (d[1].length / eventCount) * 100] });
   },
 
   render: function(){
@@ -14,7 +15,8 @@ App.DeviceView = Backbone.View.extend({
     var containerWidth = this.$el.width();
     var diameter = containerWidth - padding[1] - padding[3];
     var outerRadius = diameter / 2;
-    var labelr = outerRadius + 60;
+    var floatingLabelRadius = outerRadius + 60;
+    var innerLabelRadius = outerRadius / 2;
 
     var pie = d3.layout.pie();
     var pieData = _.map(this._data, function(d){ return d[1] });
@@ -43,21 +45,47 @@ App.DeviceView = Backbone.View.extend({
         })
         .attr("d", arc);
 
+    arcs.append("svg:rect")
+        .attr("transform", function(d) {
+              var c = arc.centroid(d),
+              x = c[0],
+              y = c[1],
+              h = Math.sqrt(x*x + y*y);
+          return "translate(" + ((x/h * floatingLabelRadius) - 40) +  ',' +
+              ((y/h * floatingLabelRadius) - 20) +  ")";
+        })
+        .attr('width', '80')
+        .attr('height', '30')
+        .attr('rx', '5').attr('ry', '5')
+        .attr("fill", function(d, i) {
+          return color(i);
+        })
+    ;
+
     arcs.append("svg:text")
         .attr("transform", function(d) {
           var c = arc.centroid(d),
               x = c[0],
               y = c[1],
               h = Math.sqrt(x*x + y*y);
-          return "translate(" + (x/h * labelr) +  ',' +
-              (y/h * labelr) +  ")";
+          return "translate(" + (x/h * floatingLabelRadius) +  ',' +
+              (y/h * floatingLabelRadius) +  ")";
         })
-        .attr("dy", ".35em")
-        .attr("text-anchor", function(d) {
-              return (d.endAngle + d.startAngle)/2 > Math.PI ?
-              "end" : "start";
-        })
+        .attr("text-anchor", "middle")
         .text(function(d, i) { return self._data[i][0] });
+
+    arcs.append("svg:text")
+        .attr("transform", function(d) {
+          var c = arc.centroid(d),
+              x = c[0],
+              y = c[1],
+              h = Math.sqrt(x*x + y*y);
+          return "translate(" + (x/h * innerLabelRadius) +  ',' +
+              (y/h * innerLabelRadius) +  ")";
+        })
+        .attr("class", "pie-label-text")
+        .attr("text-anchor", "middle")
+        .text(function(d) { return (d.value.toFixed(1) + '%') });
   }
 
 });
