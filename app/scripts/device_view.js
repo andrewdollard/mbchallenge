@@ -2,10 +2,11 @@ var App = App || {};
 
 App.DeviceView = Backbone.View.extend({
 
-  setCollection: function(event_collection) {
-    var data = event_collection.byDevice();
-    var eventCount = event_collection.length;
-    this._data = _(data).map(function(d){ return [d[0], (d[1].length / eventCount) * 100] });
+  setSampler: function(sampler) {
+    var samples = sampler.samples();
+    var values = sampler.values();
+    var eventCount = sampler.totalLength();
+    this._data = _(samples).map(function(d, i){ return [values[i], (samples[i].length / eventCount) * 100] });
   },
 
   render: function(){

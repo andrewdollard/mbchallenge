@@ -13,15 +13,16 @@ App.controller.start = function(){
 
   this._deviceView = new App.DeviceView({el: $('#device-view')});
 
-  this._updateActivityView();
+  this._updateViews();
   datePickerView.render();
 };
 
-App.controller._updateActivityView = function() {
+App.controller._updateViews = function() {
   var subset = App.events.filterByDateRange(this._startDate, App.now),
-      activitySampler = new App.TimeSampler(subset, this._periodsForDays[this._currentDayIndex]);
+      activitySampler = new App.TimeSampler(subset, this._periodsForDays[this._currentDayIndex]),
+      deviceSampler = new App.AttributeSampler(subset, 'device');
 
-  this._deviceView.setCollection(subset);
+  this._deviceView.setSampler(deviceSampler);
   this._deviceView.render();
 
   this._activityView.setSampler(activitySampler);
@@ -31,7 +32,7 @@ App.controller._updateActivityView = function() {
 App.controller.on('dateChange', function(day){
   this._currentDayIndex = _.indexOf(this._days, day);
   this._setStartDate();
-  this._updateActivityView();
+  this._updateViews();
 });
 
 App.controller._setStartDate = function(){
