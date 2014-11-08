@@ -4,6 +4,7 @@
   margin-right: 10px;
   display: inline-block;
   text-shadow: none;
+  &.selected { background-color: CornflowerBlue; }
 }
 
 @media (max-width: 768px) {

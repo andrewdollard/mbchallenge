@@ -39,6 +39,10 @@ App.controller.on('dateChange', function(days){
   this._updateViews();
 });
 
+App.controller.on('segmentChange', function(segment){
+  console.log('segment changed: ' + segment)
+});
+
 App.controller._setDayLimit = function(days){
   this._currentDayIndex = _.indexOf(this._days, days);
   var startDate = new Date(App.now),

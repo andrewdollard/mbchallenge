@@ -1,0 +1,19 @@
+h3.total {
+
+}
+
+#segment-view {
+
+  .btn {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  @media (max-width: 768px) {
+    .btn {
+      font-size: 1.3em;
+    }
+  }
+
+}
+

@@ -6,9 +6,6 @@
   padding-top: 15px;
   padding-left: 20px;
   select { display: none; }
-  .btn {
-    &.selected { background-color: paleturquoise; }
-  }
 }
 
 @media (max-width: 500px) {
