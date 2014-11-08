@@ -119,6 +119,7 @@ App.ActivityView = Backbone.View.extend({
     this._mean = !this._mean;
     var klass = (this._mean) ? 'mean-line active' : 'mean-line';
     this.$el.find('.mean-line').attr('class', klass);
+    $(e.target).blur();
   },
 
   _toggleTrend: function(e) {
@@ -126,6 +127,7 @@ App.ActivityView = Backbone.View.extend({
     this._trend = !this._trend;
     var klass = (this._trend) ? 'trend-line active' : 'trend-line';
     this.$el.find('.trend-line').attr('class', klass);
+    $(e.target).blur();
   }
 
 });

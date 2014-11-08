@@ -43,6 +43,7 @@ App.DatePickerView = Backbone.View.extend({
     this.$select.val($t.val());
 
     App.controller.trigger('dateChange', d);
+    $t.blur();
   }
 
 });
