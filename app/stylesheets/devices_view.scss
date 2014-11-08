@@ -1,0 +1,13 @@
+.devices-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  h2 {
+    text-align: center;
+  }
+}
+
+#device-view {
+  margin: 20px auto;
+}

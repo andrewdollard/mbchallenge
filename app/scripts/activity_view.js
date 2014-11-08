@@ -2,7 +2,7 @@ var App = App || {};
 
 App.ActivityView = Backbone.View.extend({
 
-  initialize: function(options) {
+  initialize: function() {
     this._$field = this.$el.find('.field');
     this._mean = false;
     this._trend = false;
