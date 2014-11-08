@@ -7,8 +7,8 @@ require 'json'
 assets do
   serve '/css', from: 'stylesheets'
   serve '/js', from: 'scripts'
-  css :main, [ '/css/*.css' ]
-  js :main, [ '/js/*.js' ]
+  css :app, [ '/css/lib/*.css', '/css/*.css' ]
+  js :app, [ '/js/*.js', '/js/models/*.js', '/js/views/*.js', '/js/samplers/*.js' ]
 end
 
 get '/' do
