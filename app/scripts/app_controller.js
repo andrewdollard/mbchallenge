@@ -6,7 +6,7 @@ App.controller.start = function(){
   var hour = 1000 * 60 * 60;
   App.now = new Date('2014-07-31');
   this._days = [1,3,7,14];
-  this._periodsForDays = [hour, hour * 3, hour * 6, hour * 12];
+  this._periods = [hour, hour * 3, hour * 6, hour * 12];
   this._setDayLimit(this._days[0]);
 
   this._segmentPredicate = null;
@@ -27,28 +27,23 @@ App.controller.on('dateChange', function(days){
 });
 
 App.controller.on('segmentChange', function(segment){
-  if (segment == 'all') {
-    this._segmentPredicate = null;
-  } else {
-    this._segmentPredicate = App.AttributePredicateFactory('gender', segment);
-  }
+  this._segmentPredicate = (segment == 'all') ? null : App.AttributePredicateFactory('gender', segment);
+  this._updateViews();
 });
-
-
 
 App.controller._updateViews = function() {
   this._datePredicate = App.DateRangePredicateFactory(this._startDate, App.now);
   var eventFilter = new App.EventFilter(App.events).addPredicate(this._datePredicate);
+
+  var segmentSampler = new App.AttributeSampler(eventFilter.filter(), 'gender');
 
   if (this._segmentPredicate != null) {
     eventFilter.addPredicate(this._segmentPredicate);
   }
 
   var filteredEvents = eventFilter.filter();
-
-  var activitySampler = new App.TimeSampler(filteredEvents, this._periodsForDays[this._currentDayIndex]),
-      deviceSampler = new App.AttributeSampler(filteredEvents, 'device'),
-      segmentSampler = new App.AttributeSampler(filteredEvents, 'gender');
+  var activitySampler = new App.TimeSampler(filteredEvents, this._periods[this._currentDayIndex]),
+      deviceSampler = new App.AttributeSampler(filteredEvents, 'device');
 
   this._segmentView.setSampler(segmentSampler);
   this._segmentView.render();
