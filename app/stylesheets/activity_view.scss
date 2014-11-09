@@ -1,7 +1,12 @@
-#activity-container {
-  width: 960px;
-  max-width: 100%;
-  margin: 0 auto;
+.activity-title-col, .date-picker-col {
+  height: 60px;
+}
+
+.activity-title-col {
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  -webkit-align-items: center;
 }
 
 #activity-view {
@@ -46,10 +51,10 @@
   path, line { stroke: orangered; }
 }
 
-
 @media (max-width: 700px) {
   .buttons { text-align: center; }
   .mean-button.btn, .trend-button.btn {
    width: 48%;
+   margin-right: 2px;
  }
 }

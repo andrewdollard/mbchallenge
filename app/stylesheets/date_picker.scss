@@ -1,7 +1,10 @@
 #date-picker-view {
+  display: -webkit-flex;
   display: flex;
   align-items: center;
+  -webkit-align-items: center;
   justify-content: flex-end;
+  -webkit-justify-content: flex-end;
   height: inherit;
   padding-top: 15px;
   padding-left: 20px;
