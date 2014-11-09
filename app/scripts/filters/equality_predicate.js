@@ -1,6 +1,6 @@
 var App = App || {};
 
-App.AttributePredicateFactory = function(attribute, value) {
+App.EqualityPredicateFactory = function(attribute, value) {
   var attr = attribute;
   var val = value;
   return function(event) {

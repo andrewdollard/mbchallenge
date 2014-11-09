@@ -10,7 +10,7 @@ App.controller.start = function(){
   this._setDayLimit(this._days[0]);
 
   this._segmentPredicate = null;
-  this._datePredicate = App.DateRangePredicateFactory(this._startDate, App.now);
+  this._datePredicate = App.RangePredicateFactory(this._startDate, App.now);
 
   this._activityView = new App.ActivityView({el: $('#activity-view')});
   this._segmentView = new App.SegmentView({el: $('#segment-view')});
@@ -27,12 +27,12 @@ App.controller.on('dateChange', function(days){
 });
 
 App.controller.on('segmentChange', function(segment){
-  this._segmentPredicate = (segment == 'all') ? null : App.AttributePredicateFactory('gender', segment);
+  this._segmentPredicate = (segment == 'all') ? null : App.EqualityPredicateFactory('gender', segment);
   this._updateViews();
 });
 
 App.controller._updateViews = function() {
-  this._datePredicate = App.DateRangePredicateFactory(this._startDate, App.now);
+  this._datePredicate = App.RangePredicateFactory('timestamp', this._startDate, App.now);
   var eventFilter = new App.EventFilter(App.events).addPredicate(this._datePredicate);
 
   var segmentSampler = new App.AttributeSampler(eventFilter.filter(), 'gender');
