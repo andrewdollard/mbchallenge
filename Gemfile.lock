@@ -3,12 +3,20 @@ GEM
   specs:
     haml (4.0.5)
       tilt
+    jasmine (2.0.3)
+      jasmine-core (~> 2.0.0)
+      phantomjs
+      rack (>= 1.2.1)
+      rake
+    jasmine-core (2.0.2)
     jsmin (1.0.1)
+    phantomjs (1.9.7.1)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rake (10.3.2)
     sass (3.4.7)
     shotgun (0.9)
       rack (>= 1.0)
@@ -28,6 +36,7 @@ PLATFORMS
 
 DEPENDENCIES
   haml
+  jasmine
   sass
   shotgun
   sinatra
