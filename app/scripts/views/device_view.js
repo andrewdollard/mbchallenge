@@ -22,10 +22,20 @@ App.DeviceView = Backbone.View.extend({
 
   _configureDimensions: function(){
     this._width = this.$el.width();
-    this._padding = [40, 110, 0, 110];
+    var floatRadiusAdjust;
+    if (this._width < 400) {
+      this._padding = [30, 70, 0, 70];
+      floatRadiusAdjust = 45;
+      this._textClass = 'pie-label-small';
+    } else {
+      this._padding = [40, 110, 0, 110];
+      floatRadiusAdjust = 60;
+      this._textClass = 'pie-label-large';
+    }
+
     var diameter = this._width - this._padding[1] - this._padding[3];
     this._outerRadius = diameter / 2;
-    this._floatingLabelRadius = this._outerRadius + 60;
+    this._floatingLabelRadius = this._outerRadius + floatRadiusAdjust;
     this._innerLabelRadius = this._outerRadius / 2;
   },
 
@@ -50,52 +60,63 @@ App.DeviceView = Backbone.View.extend({
         .attr("transform", "translate(" + (this._outerRadius + this._padding[3]) + ", " + (this._outerRadius + this._padding[0]) + ")");
 
     var color = d3.scale.category10();
-    arcs.append("path")
-        .attr("fill", function(d, i) {
-          return color(i);
-        })
-        .attr("d", arc);
 
-    arcs.append("svg:rect")
-        .attr("transform", function(d) {
-              var c = arc.centroid(d),
-              x = c[0],
-              y = c[1],
-              h = Math.sqrt(x*x + y*y);
-          return "translate(" + ((x/h * self._floatingLabelRadius) - 40) +  ',' +
-              ((y/h * self._floatingLabelRadius) - 20) +  ")";
-        })
-        .attr('width', '80')
-        .attr('height', '30')
-        .attr('rx', '5').attr('ry', '5')
-        .attr("fill", function(d, i) {
-          return color(i);
-        });
+    arcs.each(function(d, i){
+      var currentTextWidth,
+          wedge = d3.select(this);
 
-    arcs.append("svg:text")
-        .attr("transform", function(d) {
-          var c = arc.centroid(d),
-              x = c[0],
-              y = c[1],
-              h = Math.sqrt(x*x + y*y);
-          return "translate(" + (x/h * self._floatingLabelRadius) +  ',' +
-              (y/h * self._floatingLabelRadius) +  ")";
-        })
-        .attr("text-anchor", "middle")
-        .text(function(d, i) { return self._deviceNames[i] });
+      wedge.append("path")
+          .attr("fill", function() { return color(i); })
+          .attr("d", arc);
 
-    arcs.append("svg:text")
-        .attr("transform", function(d) {
-          var c = arc.centroid(d),
-              x = c[0],
-              y = c[1],
-              h = Math.sqrt(x*x + y*y);
-          return "translate(" + (x/h * self._innerLabelRadius) +  ',' +
-              (y/h * self._innerLabelRadius) +  ")";
-        })
-        .attr("class", "pie-label-text")
-        .attr("text-anchor", "middle")
-        .text(function(d) { return (d.value.toFixed(1) + '%') });
+      var floatingRect = wedge.append("svg:rect")
+          .attr('rx', '5').attr('ry', '5')
+          .attr("fill", function() { return color(i); });
+
+      var floatingText = wedge.append("svg:text")
+          .attr("transform", function(d) {
+            var c = arc.centroid(d),
+                x = c[0],
+                y = c[1],
+                h = Math.sqrt(x*x + y*y);
+            return "translate(" + (x/h * self._floatingLabelRadius) +  ',' +
+                (y/h * self._floatingLabelRadius) +  ")";
+          })
+          .attr("class", self._textClass)
+          .attr("text-anchor", "middle")
+          .text(function() {
+            return self._deviceNames[i];
+          });
+
+      wedge.append("svg:text")
+          .attr("transform", function(d) {
+            var c = arc.centroid(d),
+                x = c[0],
+                y = c[1],
+                h = Math.sqrt(x*x + y*y);
+            return "translate(" + (x/h * self._innerLabelRadius) +  ',' +
+                (y/h * self._innerLabelRadius) +  ")";
+          })
+          .attr("class", self._textClass + ' inner-label')
+          .attr("text-anchor", "middle")
+          .text(function(d) { return (d.value.toFixed(1) + '%') });
+
+      var rectWidth = floatingText.node().getBBox().width + 20;
+      var rectHeight = floatingText.node().getBBox().height + 10;
+
+      floatingRect.attr('width', rectWidth)
+                  .attr('height', rectHeight)
+                  .attr("transform", function(d) {
+                    var c = arc.centroid(d),
+                        x = c[0],
+                        y = c[1],
+                        h = Math.sqrt(x*x + y*y);
+                    return "translate(" + ((x/h * self._floatingLabelRadius) - (rectWidth / 2)) +  ',' +
+                        ((y/h * self._floatingLabelRadius) - (rectHeight / 2 + 5)) +  ")";
+                  });
+    });
+
+
   }
 
 });
