@@ -57,7 +57,7 @@ App.ActivityView = Backbone.View.extend({
                      .y(function(d) { return self._yScale(d[1] / 100) })
                      .defined(function(d) { return d != null; });
 
-    var ticks = (this._width < 680) ? 5 : 10;
+    var ticks = (this._width < 680) ? ((this._width < 400) ? 3 : 5) : 10;
 
     var xAxis = d3.svg.axis()
                       .scale(this._xScale)
