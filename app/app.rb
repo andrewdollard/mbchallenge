@@ -8,8 +8,8 @@ assets do
   serve '/css', from: 'stylesheets'
   serve '/js', from: 'scripts'
   css :app,[ '/css/lib/*.css', '/css/*.css' ]
-  js :app, [ '/js/lib_load.js',
-             '/js/*.js',
+  js :js_lib, [ '/js/lib_load.js' ]
+  js :app, [ '/js/*.js',
              '/js/models/*.js',
              '/js/views/*.js',
              '/js/samplers/*.js',
