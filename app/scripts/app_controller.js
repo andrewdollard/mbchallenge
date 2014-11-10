@@ -7,10 +7,9 @@ App.controller.start = function(){
   App.now = new Date('2014-07-31');
   this._days = [1,3,7,14];
   this._periods = [hour, hour * 3, hour * 6, hour * 12];
-  this._setDayLimit(this._days[0]);
 
+  this._setDatePredicate(this._days[0]);
   this._segmentPredicate = null;
-  this._datePredicate = App.RangePredicateFactory(this._startDate, App.now);
 
   this._activityView = new App.ActivityView({el: $('#activity-view')});
   this._segmentView = new App.SegmentView({el: $('#segment-view')});
@@ -22,7 +21,7 @@ App.controller.start = function(){
 };
 
 App.controller.on('dateChange', function(days){
-  this._setDayLimit(days);
+  this._setDatePredicate(days);
   this._updateViews();
 });
 
@@ -32,33 +31,34 @@ App.controller.on('segmentChange', function(segment){
 });
 
 App.controller._updateViews = function() {
-  this._datePredicate = App.RangePredicateFactory('timestamp', this._startDate, App.now);
   var eventFilter = new App.EventFilter(App.events).addPredicate(this._datePredicate);
+  var filtered = eventFilter.filter();
 
-  var segmentSampler = new App.AttributeSampler(eventFilter.filter(), 'gender');
+  var segmentSampler = new App.AttributeSampler(filtered, 'gender');
 
   if (this._segmentPredicate != null) {
     eventFilter.addPredicate(this._segmentPredicate);
+    filtered = eventFilter.filter();
   }
 
-  var filteredEvents = eventFilter.filter();
-  var activitySampler = new App.TimeSampler(filteredEvents, this._periods[this._currentDayIndex]),
-      deviceSampler = new App.AttributeSampler(filteredEvents, 'device');
+  var activitySampler = new App.TimeSampler(filtered, this._period),
+      deviceSampler = new App.AttributeSampler(filtered, 'device');
+
+  this._activityView.setSampler(activitySampler);
+  this._activityView.render();
 
   this._segmentView.setSampler(segmentSampler);
   this._segmentView.render();
 
   this._deviceView.setSampler(deviceSampler);
   this._deviceView.render();
-
-  this._activityView.setSampler(activitySampler);
-  this._activityView.render();
 };
 
-App.controller._setDayLimit = function(days){
-  this._currentDayIndex = _.indexOf(this._days, days);
+App.controller._setDatePredicate = function(days) {
+  var index = _.indexOf(this._days, days);
   var startDate = new Date(App.now),
       dayOfMonth =  startDate.getDate();
-  startDate.setDate(dayOfMonth - this._days[this._currentDayIndex]);
-  this._startDate = startDate;
+  startDate.setDate(dayOfMonth - days);
+  this._period = this._periods[index];
+  this._datePredicate = App.RangePredicateFactory('timestamp', startDate, App.now);
 };
