@@ -33,11 +33,3 @@ App.TimeSampler.prototype.timestamps = function() {
 
   return result;
 };
-
-App.TimeSampler.prototype.startTime = function() {
-  return new Date(this._timeFloor);
-};
-
-App.TimeSampler.prototype.endTime = function() {
-  return new Date(this._timeCeil);
-};
