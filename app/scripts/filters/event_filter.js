@@ -13,8 +13,8 @@ App.EventFilter.prototype.addPredicate = function(predicate) {
 
 App.EventFilter.prototype.filter = function() {
   var self = this;
-  var filtered = this._events.filter(function (event) {
-    return _.every(self._predicates, function (pred) {
+  var filtered = this._events.filter(function(event) {
+    return _.every(self._predicates, function(pred) {
       return pred(event);
     });
   });
