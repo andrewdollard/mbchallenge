@@ -1,8 +1,12 @@
-describe('EqualityPredicateFactory', function(){
+describe('EqualityPredicate', function(){
 
-  it('should return a function', function(){
-    var res = App.EqualityPredicateFactory('foo', 'bar');
-    expect(typeof res).toEqual('function');
-1  });
+  describe('Factory', function(){
+
+    it('should return a function', function(){
+      var res = App.EqualityPredicateFactory('foo', 'bar');
+      expect(typeof res).toEqual('function');
+    });
+
+  });
 
 });
